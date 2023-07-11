@@ -14,6 +14,8 @@ iOS 15,
 Swift 5.0
 Xcode 13.0+
 
+![Untitled-2](https://github.com/devdchaudhary/CountryKit/assets/52855516/d7fb41d9-1554-476c-b30e-b1ebd5362c8b)
+
 Installation
 
 Swift Package Manager
