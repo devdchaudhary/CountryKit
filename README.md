@@ -8,12 +8,6 @@ Country Flag
 Country Name
 Country Code
 
-Light Mode
-![Simulator Screen Recording - iPhone 14 Pro - 2023-07-07 at 12 16 54](https://github.com/devdchaudhary/VoiceRecorderKit/assets/52855516/cb821879-1d9d-4f3f-87ad-755e1f74258c)
-
-Supports Dark Mode
-![Simulator Screen Recording - iPhone 14 Pro - 2023-06-16 at 07 08 05](https://github.com/devdchaudhary/VoiceRecorder/assets/52855516/82a9408a-cec8-4559-a366-6608276f890e)
-
 Requirements
 
 iOS 15,
@@ -46,47 +40,44 @@ Below is an example demonstrating the use of the CountryPicker View.
 
 ```
 import SwiftUI
-import CountryPicker
+import CountryKit
 
 struct ContentView: View {
     
-    @StateObject var recorder = AudioRecorder(numberOfSamples: 15, audioFormatID: kAudioFormatAppleLossless, audioQuality: .max)
-        
-    var body: some View {
-        VStack {
-            List {
-                ForEach(recorder.recordings, id: \.uid) { recording in
-                    VoicePlayerView(audioUrl: recording.fileURL)
-                        .onAppear {
-                            print(recording.fileURL)
-                        }
-                }
-                .onDelete { indexSet in
-                    delete(at: indexSet)
-                }
-            }
-            .listStyle(.inset)
-            Spacer()
-            VoiceRecorderView(audioRecorder: recorder)
-        }
-        .onAppear {
-            recorder.fetchRecordings()
-        }
-    }
+    @State private var showPicker = false
     
-    func delete(at offsets: IndexSet) {
-
-        var recordingIndex: Int = 0
-
-        for index in offsets {
-            recordingIndex = index
+    @State private var code = ""
+    @State private var flag = ""
+    @State private var countryName = ""
+    
+    var body: some View {
+        
+        VStack {
+            
+            Button {
+                showPicker.toggle()
+            } label: {
+                Text("Show Picker")
+            }
+            .padding(.bottom)
+            
+            HStack {
+                Text(flag)
+                Text(countryName)
+                Text("+\(code)")
+                    .foregroundColor(.primaryText)
+            }
+            
         }
-
-        let recording = recorder.recordings[recordingIndex]
-        recorder.deleteRecording(url: recording.fileURL, onSuccess: {
-            recorder.recordings.remove(at: recordingIndex)
-            DropView.showSuccess(title: "Recording removed!")
-        })
+        .padding()
+        .fullScreenCover(isPresented: $showPicker) {
+            CountryPicker { countryFlag, name, countryCode in
+                flag = countryFlag
+                countryName = name
+                code = countryCode
+            }
+        }
     }
 }
+
 ```
