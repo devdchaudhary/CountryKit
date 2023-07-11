@@ -5,7 +5,9 @@ A Package that uses the Locale framework to allow users to fetch a predefined li
 The View uses a ```CountryPicker``` constructor wrapper to show the picker view and returns three constants in return in a closure.
 
 Country Flag
+
 Country Name
+
 Country Code
 
 Requirements
