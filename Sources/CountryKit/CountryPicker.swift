@@ -10,18 +10,19 @@ import SwiftUI
 public struct CountryPicker: View {
     
     @Environment(\.dismiss) var dismiss
-    @Binding var selectedCode: String
     
     @State var isSearched = false
     @State var searchQuery = ""
     
     @State var countries = NSLocale.isoCountryCodes
     
-    public init(selectedCode: Binding<String>, isSearched: Bool = false, searchQuery: String = "", countries: [String] = NSLocale.isoCountryCodes) {
-        self._selectedCode = selectedCode
+    var countrySelected: ((String, String, String) -> Void)?
+
+    public init(isSearched: Bool = false, searchQuery: String = "", countries: [String] = NSLocale.isoCountryCodes, countrySelected: @escaping (String, String, String) -> Void) {
         self.isSearched = isSearched
         self.searchQuery = searchQuery
         self.countries = countries
+        self.countrySelected = countrySelected
     }
     
     public var body: some View {
@@ -129,7 +130,7 @@ public struct CountryPicker: View {
     }
     
     func optionClicked(countryCode: String) {
-        selectedCode = Constants.countryDictionary[countryCode] ?? ""
+        countrySelected?(countryCode.getFlag, Locale.current.localizedString(forRegionCode: countryCode) ?? "", Constants.countryDictionary[countryCode] ?? "")
         dismiss()
     }
 }
